@@ -1,4 +1,7 @@
 import 'package:android_dev/screens/home_screen/models/post_model.dart';
+import 'package:android_dev/screens/home_screen/state/feed_controller.dart';
+import 'package:android_dev/screens/home_screen/widgets/comment_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 class PostWidget extends StatelessWidget {
@@ -10,9 +13,27 @@ class PostWidget extends StatelessWidget {
   void openBottomSheet(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
-      builder: (context) => const SizedBox(
-        height: 200,
-        child: Center(child: Text('Comments')),
+      builder: (context) => Consumer(
+        builder: (context, ref, _) {
+          // Read the current post so comment likes update inside the sheet
+          final current =
+              ref.watch(feedControllerProvider).firstWhere((p) => p.id == post.id);
+          if (current.comments.isEmpty) {
+            return const SizedBox(height: 200, child: Center(child: Text('No comments yet')));
+          }
+          return SizedBox(
+            height: 300,
+            child: ListView.builder(
+              itemCount: current.comments.length,
+              itemBuilder: (context, index) => CommentWidget(
+                comment: current.comments[index],
+                onLike: () => ref
+                    .read(feedControllerProvider.notifier)
+                    .toggleCommentLike(post.id, index),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

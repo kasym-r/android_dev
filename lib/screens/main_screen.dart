@@ -4,6 +4,7 @@ import "package:android_dev/screens/tabs/search_tab.dart";
 import "package:android_dev/screens/tabs/profile_tab.dart";
 import "package:android_dev/widgets/animated_indexed_stack.dart";
 import "package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart";
+import "package:flutter/material.dart" as m;
 import "package:material_ui/material_ui.dart";
 
 class MainScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return m.Scaffold(
       backgroundColor: Colors.grey[200],
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: _icons,
